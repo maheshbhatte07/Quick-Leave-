@@ -1,6 +1,6 @@
 // Database Helper Functions
 // This simulates database operations using localStorage
-
+//db connection
 class Database {
     constructor() {
         this.initializeDatabase();
