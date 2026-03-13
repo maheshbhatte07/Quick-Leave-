@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Leave Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-brand">Leave Management System - Admin</div>
+        <div class="nav-links">
+            <a href="admin-dashboard.html">Dashboard</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="content-box">
+            <h2>Admin Dashboard</h2>
+            <div class="user-info">
+                <p>Welcome Admin, <span id="adminName"></span></p>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="leaves">Leave Applications</button>
+                    <button class="tab-btn" data-tab="users">Manage Users</button>
+                </div>
+                
+                <!-- Leave Applications Tab -->
+                <div id="leaves-tab" class="tab-content active">
+                    <h3>Pending Leave Applications</h3>
+                    <div class="filter-group">
+                        <label for="statusFilterAdmin">Filter by Status:</label>
+                        <select id="statusFilterAdmin">
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="all">All</option>
+                        </select>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="adminLeaveTable">
+                            <thead>
+                                <tr>
+                                    <th>Application ID</th>
+                                    <th>User ID</th>
+                                    <th>User Name</th>
+                                    <th>Leave Type</th>
+                                    <th>From Date</th>
+                                    <th>To Date</th>
+                                    <th>Days</th>
+                                    <th>Reason</th>
+                                    <th>Applied On</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminLeaveBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Manage Users Tab -->
+                <div id="users-tab" class="tab-content">
+                    <h3>Create New User</h3>
+                    <form id="createUserForm" class="admin-form">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label for="newFullName">Full Name</label>
+                                <input type="text" id="newFullName" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="newEmail">Email</label>
+                                <input type="email" id="newEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label for="newUserId">User ID</label>
+                                <input type="text" id="newUserId" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="newPassword">Password</label>
+                                <input type="password" id="newPassword" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label for="newDepartment">Department</label>
+                                <input type="text" id="newDepartment" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create User</button>
+                    </form>
+                    
+                    <h3>All Users</h3>
+                    <div class="table-container">
+                        <table id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Department</th>
+                                    <th>Registered On</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    
+    <!-- Modal for Leave Action -->
+    <div id="leaveModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="modalTitle">Leave Action</h3>
+            <div id="modalBody">
+                <div class="input-group">
+                    <label for="actionRemarks">Remarks (Optional)</label>
+                    <textarea id="actionRemarks" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button id="approveBtn" class="btn btn-success">Approve</button>
+                    <button id="rejectBtn" class="btn btn-danger">Reject</button>
+                    <button id="cancelBtn" class="btn btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>

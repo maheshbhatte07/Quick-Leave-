@@ -1,0 +1,282 @@
+DATABASE SCHEMA DOCUMENTATION
+===============================
+
+This Leave Management System uses LocalStorage to simulate database functionality.
+Below is the schema representation of the data structures used:
+
+---
+
+TABLE: users
+-------------
+Description: Stores user account information
+
+Fields:
+- id              : INTEGER (Auto-increment, Primary Key)
+- userId          : VARCHAR(50) (Unique, Not Null)
+- password        : VARCHAR(100) (Not Null)
+- fullName        : VARCHAR(100) (Not Null)
+- email           : VARCHAR(100) (Unique, Not Null)
+- department      : VARCHAR(100) (Not Null)
+- userType        : VARCHAR(20) (Not Null, Values: 'user' or 'admin')
+- registeredOn    : TIMESTAMP (Not Null, Default: Current Timestamp)
+
+Constraints:
+- PRIMARY KEY (id)
+- UNIQUE (userId)
+- UNIQUE (email)
+- CHECK (userType IN ('user', 'admin'))
+
+Default Data:
+- Admin User (userId: 'admin', password: 'admin123')
+
+Sample Data:
+{
+    "id": 1,
+    "userId": "admin",
+    "password": "admin123",
+    "fullName": "System Administrator",
+    "email": "admin@lms.com",
+    "department": "Administration",
+    "userType": "admin",
+    "registeredOn": "2024-02-05T10:30:00.000Z"
+}
+
+---
+
+TABLE: leaves
+--------------
+Description: Stores leave application information
+
+Fields:
+- id              : INTEGER (Auto-increment, Primary Key)
+- userId          : VARCHAR(50) (Foreign Key references users.userId)
+- userName        : VARCHAR(100) (Not Null)
+- department      : VARCHAR(100) (Not Null)
+- leaveType       : VARCHAR(50) (Not Null)
+- fromDate        : DATE (Not Null)
+- toDate          : DATE (Not Null)
+- days            : INTEGER (Not Null, Calculated)
+- reason          : TEXT (Not Null)
+- status          : VARCHAR(20) (Not Null, Default: 'Pending')
+- appliedOn       : TIMESTAMP (Not Null, Default: Current Timestamp)
+- remarks         : TEXT (Nullable)
+- actionDate      : TIMESTAMP (Nullable)
+
+Constraints:
+- PRIMARY KEY (id)
+- FOREIGN KEY (userId) REFERENCES users(userId)
+- CHECK (status IN ('Pending', 'Approved', 'Rejected'))
+- CHECK (toDate >= fromDate)
+- CHECK (days > 0)
+
+Leave Types Available:
+- Sick Leave
+- Casual Leave
+- Earned Leave
+- Maternity Leave
+- Paternity Leave
+- Unpaid Leave
+
+Sample Data:
+{
+    "id": 1,
+    "userId": "john123",
+    "userName": "John Doe",
+    "department": "IT",
+    "leaveType": "Casual Leave",
+    "fromDate": "2024-02-15",
+    "toDate": "2024-02-17",
+    "days": 3,
+    "reason": "Personal work",
+    "status": "Pending",
+    "appliedOn": "2024-02-05T10:30:00.000Z",
+    "remarks": "",
+    "actionDate": null
+}
+
+---
+
+STORAGE KEYS
+-------------
+The following keys are used in LocalStorage:
+
+1. 'users'
+   - Type: JSON Array
+   - Purpose: Stores all user accounts
+   - Structure: Array of user objects
+
+2. 'leaves'
+   - Type: JSON Array
+   - Purpose: Stores all leave applications
+   - Structure: Array of leave objects
+
+3. 'leaveCounter'
+   - Type: String (Number)
+   - Purpose: Auto-increment counter for leave IDs
+   - Structure: String representation of integer
+
+---
+
+RELATIONSHIPS
+-------------
+
+1. User to Leaves (One-to-Many)
+   - One user can have multiple leave applications
+   - Each leave application belongs to one user
+   - Relationship: users.userId -> leaves.userId
+
+---
+
+INDEXES (for optimization in real database)
+-------------------------------------------
+
+If implementing with a real database, consider these indexes:
+
+1. users table:
+   - PRIMARY KEY INDEX on id
+   - UNIQUE INDEX on userId
+   - UNIQUE INDEX on email
+   - INDEX on userType
+
+2. leaves table:
+   - PRIMARY KEY INDEX on id
+   - INDEX on userId (Foreign Key)
+   - INDEX on status
+   - INDEX on appliedOn
+   - COMPOSITE INDEX on (userId, status)
+
+---
+
+DATA OPERATIONS
+---------------
+
+1. CREATE Operations:
+   - Register new user
+   - Submit leave application
+   - Admin creates new user
+
+2. READ Operations:
+   - User login authentication
+   - View leave status
+   - View leave history
+   - Admin view all leaves
+   - Admin view all users
+
+3. UPDATE Operations:
+   - Approve leave application
+   - Reject leave application
+   - Update leave remarks
+
+4. DELETE Operations:
+   - Admin delete user (with cascade consideration)
+
+---
+
+BUSINESS RULES
+--------------
+
+1. User Registration:
+   - Email must be unique
+   - User ID must be unique
+   - Password minimum 6 characters
+   - All fields are mandatory
+
+2. Leave Application:
+   - To Date must be >= From Date
+   - Leave reason is mandatory
+   - Days are automatically calculated
+   - Default status is 'Pending'
+
+3. Leave Approval/Rejection:
+   - Only admin can approve/reject
+   - Remarks are optional
+   - Action date is automatically recorded
+   - Cannot modify after action is taken
+
+4. User Access:
+   - Users can only view their own leaves
+   - Admin can view all leaves
+   - Admin can create/delete users
+
+---
+
+DATA VALIDATION
+---------------
+
+1. Email Format: ^[^\s@]+@[^\s@]+\.[^\s@]+$
+2. Password Length: Minimum 6 characters
+3. Date Format: YYYY-MM-DD
+4. Date Range: toDate >= fromDate
+5. User Type: 'user' or 'admin' only
+6. Leave Status: 'Pending', 'Approved', or 'Rejected' only
+
+---
+
+MIGRATION TO REAL DATABASE
+---------------------------
+
+To migrate from LocalStorage to a real database (MySQL/PostgreSQL):
+
+SQL Schema for users table:
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userId VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    fullName VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    department VARCHAR(100) NOT NULL,
+    userType ENUM('user', 'admin') NOT NULL DEFAULT 'user',
+    registeredOn TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_userType (userType),
+    INDEX idx_userId (userId)
+);
+
+SQL Schema for leaves table:
+
+CREATE TABLE leaves (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userId VARCHAR(50) NOT NULL,
+    userName VARCHAR(100) NOT NULL,
+    department VARCHAR(100) NOT NULL,
+    leaveType VARCHAR(50) NOT NULL,
+    fromDate DATE NOT NULL,
+    toDate DATE NOT NULL,
+    days INT NOT NULL,
+    reason TEXT NOT NULL,
+    status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+    appliedOn TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    remarks TEXT,
+    actionDate TIMESTAMP NULL,
+    FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE,
+    INDEX idx_userId (userId),
+    INDEX idx_status (status),
+    INDEX idx_appliedOn (appliedOn),
+    INDEX idx_userId_status (userId, status),
+    CHECK (toDate >= fromDate),
+    CHECK (days > 0)
+);
+
+---
+
+NOTES
+-----
+
+1. In the current implementation, passwords are stored in plain text in LocalStorage.
+   For production, implement proper password hashing (bcrypt, argon2, etc.)
+
+2. Session management uses sessionStorage which clears on browser/tab close.
+   For production, implement proper session management with tokens (JWT).
+
+3. No audit trail is maintained in current implementation.
+   For production, consider adding audit tables to track changes.
+
+4. No foreign key constraints are enforced in LocalStorage.
+   Ensure referential integrity checks in application code.
+
+5. LocalStorage has size limitations (typically 5-10MB per domain).
+   For production with large datasets, use a proper database.
+
+---
+
+END OF DATABASE SCHEMA DOCUMENTATION
