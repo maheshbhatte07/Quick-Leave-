@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave History - Leave Management System</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-brand">Leave Management System</div>
+        <div class="nav-links">
+            <a href="apply-leave.html">Apply Leave</a>
+            <a href="leave-status.html">Leave Status</a>
+            <a href="leave-history.html">Leave History</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="content-box">
+            <h2>Leave History</h2>
+            <div class="user-info">
+                <p>User ID: <span id="userIdDisplay"></span></p>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3 id="totalLeaves">0</h3>
+                    <p>Total Leaves Applied</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="approvedLeaves">0</h3>
+                    <p>Approved</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="rejectedLeaves">0</h3>
+                    <p>Rejected</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="pendingLeaves">0</h3>
+                    <p>Pending</p>
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label for="yearFilter">Filter by Year:</label>
+                <select id="yearFilter">
+                    <option value="all">All Years</option>
+                </select>
+            </div>
+            
+            <div class="table-container">
+                <table id="leaveHistoryTable">
+                    <thead>
+                        <tr>
+                            <th>Application ID</th>
+                            <th>Leave Type</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Days</th>
+                            <th>Applied On</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaveHistoryBody">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script src="assets/js/leave-history.js"></script>
+</body>
+</html>

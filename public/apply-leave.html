@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Leave - Leave Management System</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-brand">Leave Management System</div>
+        <div class="nav-links">
+            <a href="apply-leave.html">Apply Leave</a>
+            <a href="leave-status.html">Leave Status</a>
+            <a href="leave-history.html">Leave History</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="content-box">
+            <h2>Apply for Leave</h2>
+            <div class="user-info">
+                <p>Welcome, <span id="userName"></span></p>
+                <p>User ID: <span id="userIdDisplay"></span></p>
+            </div>
+            
+            <form id="applyLeaveForm">
+                <div class="input-group">
+                    <label for="leaveType">Leave Type</label>
+                    <select id="leaveType" name="leaveType" required>
+                        <option value="">Select Leave Type</option>
+                        <option value="Sick Leave">Sick Leave</option>
+                        <option value="Casual Leave">Casual Leave</option>
+                        <option value="Earned Leave">Earned Leave</option>
+                        <option value="Maternity Leave">Maternity Leave</option>
+                        <option value="Paternity Leave">Paternity Leave</option>
+                        <option value="Unpaid Leave">Unpaid Leave</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="fromDate">From Date</label>
+                    <input type="date" id="fromDate" name="fromDate" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="toDate">To Date</label>
+                    <input type="date" id="toDate" name="toDate" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="reason">Reason for Leave</label>
+                    <textarea id="reason" name="reason" rows="4" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit Leave Application</button>
+            </form>
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    
+    <script src="assets/js/apply-leave.js"></script>
+</body>
+</html>

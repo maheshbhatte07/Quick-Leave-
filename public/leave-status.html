@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Status - Leave Management System</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-brand">Leave Management System</div>
+        <div class="nav-links">
+            <a href="apply-leave.html">Apply Leave</a>
+            <a href="leave-status.html">Leave Status</a>
+            <a href="leave-history.html">Leave History</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="content-box">
+            <h2>Leave Status</h2>
+            <div class="user-info">
+                <p>User ID: <span id="userIdDisplay"></span></p>
+            </div>
+            
+            <div class="filter-group">
+                <label for="statusFilter">Filter by Status:</label>
+                <select id="statusFilter">
+                    <option value="all">All</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
+            
+            <div class="table-container">
+                <table id="leaveStatusTable">
+                    <thead>
+                        <tr>
+                            <th>Application ID</th>
+                            <th>Leave Type</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Days</th>
+                            <th>Applied On</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaveStatusBody">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    
+    <script src="assets/js/leave-status.js"></script>
+</body>
+</html>
